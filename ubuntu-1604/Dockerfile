@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER Torben Knerr <mail@tknerr.de>
+MAINTAINER Dmitry Sosonny <dissnn@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -16,22 +16,22 @@ RUN apt-get update && apt-get install -y \
 # ensure we have the en_US.UTF-8 locale available
 RUN locale-gen en_US.UTF-8
 
-# setup the vagrant user
-RUN if ! getent passwd vagrant; then useradd -d /home/vagrant -m -s /bin/bash vagrant; fi \
-    && echo vagrant:vagrant | chpasswd \
-    && echo 'vagrant ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+# setup the ubuntu user
+RUN if ! getent passwd ubuntu; then useradd -d /home/ubuntu -m -s /bin/bash ubuntu; fi \
+    && echo ubuntu:ubuntu | chpasswd \
+    && echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
     && mkdir -p /etc/sudoers.d \
-    && echo 'vagrant ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/vagrant \
-    && chmod 0440 /etc/sudoers.d/vagrant
+    && echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/ubuntu \
+    && chmod 0440 /etc/sudoers.d/ubuntu
 
-# add the vagrant insecure public key
-RUN mkdir -p /home/vagrant/.ssh \
-    && chmod 0700 /home/vagrant/.ssh \
+# add the ubuntu insecure public key
+RUN mkdir -p /home/ubuntu/.ssh \
+    && chmod 0700 /home/ubuntu/.ssh \
     && wget --no-check-certificate \
       https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub \
-      -O /home/vagrant/.ssh/authorized_keys \
-    && chmod 0600 /home/vagrant/.ssh/authorized_keys \
-    && chown -R vagrant /home/vagrant/.ssh
+      -O /home/ubuntu/.ssh/authorized_keys \
+    && chmod 0600 /home/ubuntu/.ssh/authorized_keys \
+    && chown -R ubuntu /home/ubuntu/.ssh
 
 # don't clean packages, we might be using vagrant-cachier
 RUN rm /etc/apt/apt.conf.d/docker-clean
